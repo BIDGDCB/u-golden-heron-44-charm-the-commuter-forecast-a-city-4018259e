@@ -21,6 +21,9 @@ const ENTRY =
 
 if ([...ENTRY].length > 140) throw new Error('entry over 140 characters');
 if (!ENTRY.trim()) throw new Error('entry is empty');
+// The bounty asks for exactly one line: a stray newline would silently
+// produce a multi-line file, so reject it rather than shipping it.
+if (/[\r\n]/.test(ENTRY)) throw new Error('entry must be a single line');
 
 mkdirSync(OUT, { recursive: true });
 writeFileSync(join(OUT, 'entry.txt'), ENTRY, 'utf8');
